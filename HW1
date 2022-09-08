@@ -1,0 +1,8 @@
+#Exercise 1
+A p value is the probability of obtaining results given that the null hypothesis is true. 
+In this case, the null hypothesis is that a positive test result indicates that a person has HIV. 
+If someone gets a positive result, there is a 5% chance that the individual does not have HIV (null hypothesis is false).
+This would not be statistically significant if we are setting the p value threshold to be under 0.05 (5%).
+
+#Exercise 2
+Because there is no false negative rate, the probability that a person will get a positive test if they are infected is 100%.
