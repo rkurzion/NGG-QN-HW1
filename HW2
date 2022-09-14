@@ -1,0 +1,26 @@
+import matplotlib.pyplot as plt
+import numpy as np
+import scipy.stats as st
+
+mu = 150
+sigma = 24
+N = 10000
+
+# Get samples
+samples = np.random.normal(mu, sigma, N)
+
+nbins = 100
+counts, edges = np.histogram(samples, bins=nbins)
+xaxis = (edges[1:] + edges[:-1])/2
+n_pdf = np.divide(counts, np.trapz(counts, xaxis))
+plt.bar(xaxis, n_pdf)
+
+# Show theoretical pdf in red
+plt.plot(xaxis, st.norm.pdf(xaxis, mu, sigma), 'r-', linewidth=2)
+
+# labels, ets
+plt.title(f'Gaussian pdf, mu={mu:.2f}, sigma={sigma:.2f}')
+plt.xlabel('Value')
+plt.ylabel('Probability')
+plt.legend(['Simulated', 'Theoretical'])
+plt.show()
