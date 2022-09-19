@@ -1,0 +1,38 @@
+Mean = 10; SD = 2
+
+
+METHOD 1: large n, known SD
+example calc for n = 5: 
+  SEM = 2/sqrt(5) = 0.89
+
+95% confidence interval for each n: 
+  n = 5 : [9.11,10.89]
+  n = 10 : [9.37,10.63]
+  n = 20 : [9.55,10.45]
+  n = 40 : [9.68,10.32]
+  n = 80 : [9.78,10.22]
+  n = 160 : [9.84,10.16]
+  n = 1000 : [9.94,10.06]
+
+METHOD 2: small n, unknown SD
+example calc for n = 5 (df = 4)
+10 +/- 2.78(2/sqrt(5))
+
+95% confidence interval for each n:
+  n = 5 : [7.5,12.5]
+  n = 10 : [8.6,11.4]
+  n = 20 : [9.1,10.9]
+  n = 40 : [9.4,10.6]
+  n = 80 : [9.6,10.4]
+  n = 160 : [9.7,10.3]
+  n = 1000 : [9.9,10.1]
+
+METHOD 3: bootstrap
+x = np.random.normal(loc=10, scale=2, size=5)
+scipy.stats.bootstrap(x,n_resamples=9999)
+(repeat this for each size)
+
+METHOD 4: Bayesian credible intervals
+Credible interval is computed in the same way as analytically from sample mean and SEM.
+Thus, these answers should be the same as METHOD 1.
+  Can also use scipy.stats.bayes_mvs(data, alpha=0.95)
