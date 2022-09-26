@@ -1,0 +1,42 @@
+import numpy as np
+import scipy.stats as st
+import matplotlib.pyplot as plt
+from IPython.display import display, clear_output
+
+# Define paired measurements in terms of a difference and then additive 0-mean noise
+mu          = 1
+sigma       = 1
+mu_diff     = 1
+mu_noise    = 0
+sigma_noise = 0.5
+
+# Get random samples
+N = 10000
+X1 = np.random.normal(mu, sigma, N)
+X2 = X1 + mu_diff + np.random.normal(mu_noise, sigma_noise, N)
+
+# Compute the difference
+D = X2 - X1
+
+# Note that X1 and X2 are highly correlated (see figure), so the variance (or std) of the difference needs to take into account the covariance
+# var(X2 - X1) = cov(X2 - X1, X2 - X1)
+#              = cov(X2, X2) + cov(X1, X1) - cov(X2, X1) - cov(X1, X2)
+#              = var(X2) + var(X1) - cov(X2,X1) - cov(X1,X2)
+plt.plot(X1, X2, 'ko', markerfacecolor='k')
+plt.xlabel('X1')
+plt.ylabel('X2')
+plt.show()
+cov = np.cov(X1, X2)
+print(f'variance={cov[0,0]+cov[1,1]-cov[0,1]-cov[1,0]:.4f} (computed), {D.var(ddof=1):.4f} (python function)')
+
+# Compute the t-statistic 
+t_D = D.mean()*np.sqrt(N)/D.std(ddof=1)
+
+# The p-value is the probabilty of obtaining the t-statistic under the null hypothesis; that is, 1 minus the cdf of the t-distribution, given n-1 degrees of freedom (multiplied by two because we are looking at two symmetric tails)
+p_D = 2.*(1-st.t.cdf(t_D, N-1))
+
+# Compare to what we get from ttest
+tstat, pval = st.ttest_1samp(D, 0)
+
+print(f't = {t_D:.4f} (computed) {tstat:.4f} (python function)')
+print(f'p = {p_D:.4f} (computed) {pval:.4f} (python function)')
